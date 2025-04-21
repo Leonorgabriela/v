@@ -1,103 +1,179 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora Matemática</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #f0f4f8, #d9e4f5);
-      padding: 40px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-    select, input, button {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-    }
-    .resultado {
-      margin-top: 30px;
-      font-weight: bold;
-      font-size: 1.5em;
-      color: #333;
-    }
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #666;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Matemática</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        label, select, button {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            resize: none;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
-  <h1>🧠 Calculadora Matemática</h1>
 
-  <select id="operacion" onchange="mostrarInputs()">
-    <option value="">Selecciona una operación</option>
-    <option value="division">División</option>
-    <option value="mcm">MCM</option>
-    <option value="mcd">MCD</option>
-    <option value="primo">¿Es primo?</option>
-    <option value="fibonacci">Fibonacci</option>
-  </select>
+<div class="container">
+    <h1>Calculadora Matemática</h1>
+    
+    <label for="operacion">Selecciona una operación:</label>
+    <select id="operacion">
+        <option value="básicas">Operaciones básicas</option>
+        <option value="sucesiones">Sucesiones</option>
+        <option value="orden">Orden</option>
+        <option value="probabilidad">Probabilidad</option>
+    </select>
 
-  <div id="inputs"></div>
-  <button onclick="calcular()">Calcular</button>
-  <div class="resultado" id="resultado"></div>
+    <label for="subOperacion">Selecciona una suboperación:</label>
+    <select id="subOperacion">
+        <!-- Las suboperaciones se llenarán dinámicamente -->
+    </select>
 
-  <footer>
-    Creado por Leonor Gabriela Rubio ✨
-  </footer>
+    <button onclick="calcular()">Calcular</button>
 
-  <script>
-    function mostrarInputs() {
-      const operacion = document.getElementById('operacion').value;
-      const inputs = document.getElementById('inputs');
-      inputs.innerHTML = '';
+    <textarea id="resultado" placeholder="Resultado aparecerá aquí..." disabled></textarea>
+</div>
 
-      if (['division', 'mcm', 'mcd'].includes(operacion)) {
-        inputs.innerHTML = `
-          <input type="number" id="num1" placeholder="Número 1">
-          <input type="number" id="num2" placeholder="Número 2">
-        `;
-      } else if (operacion === 'primo' || operacion === 'fibonacci') {
-        inputs.innerHTML = `<input type="number" id="num1" placeholder="Número">`;
-      }
+<script>
+    const operacionSelect = document.getElementById("operacion");
+    const subOperacionSelect = document.getElementById("subOperacion");
+    const resultadoTextArea = document.getElementById("resultado");
+
+    operacionSelect.addEventListener("change", actualizarSubOperaciones);
+
+    function actualizarSubOperaciones() {
+        const operacion = operacionSelect.value;
+        subOperacionSelect.innerHTML = "";  // Limpiar opciones anteriores
+
+        let opciones = [];
+
+        if (operacion === "básicas") {
+            opciones = ["División", "MCM", "MCD", "Verificar primo"];
+        } else if (operacion === "sucesiones") {
+            opciones = ["Secuencia Fibonacci", "Congruencia", "Teorema de Euler", "Sucesión aritmética", "Sucesión geométrica"];
+        } else if (operacion === "orden") {
+            opciones = ["Números ascendentes", "Números descendentes"];
+        } else if (operacion === "probabilidad") {
+            opciones = ["Permutación", "Combinación"];
+        }
+
+        // Añadir las opciones al select de suboperaciones
+        opciones.forEach(opcion => {
+            const option = document.createElement("option");
+            option.value = opcion;
+            option.textContent = opcion;
+            subOperacionSelect.appendChild(option);
+        });
     }
 
     function calcular() {
-      const operacion = document.getElementById('operacion').value;
-      const n1 = parseInt(document.getElementById('num1')?.value);
-      const n2 = parseInt(document.getElementById('num2')?.value);
-      let resultado = '';
+        const operacion = operacionSelect.value;
+        const subOperacion = subOperacionSelect.value;
+        let resultado = "";
 
-      if (operacion === 'division') {
-        resultado = n2 !== 0 ? `Resultado: ${n1 / n2}` : 'No se puede dividir por cero';
-      } else if (operacion === 'mcm') {
-        const mcm = (a, b) => Math.abs(a * b) / mcd(a, b);
-        resultado = `MCM: ${mcm(n1, n2)}`;
-      } else if (operacion === 'mcd') {
-        resultado = `MCD: ${mcd(n1, n2)}`;
-      } else if (operacion === 'primo') {
-        const esPrimo = num => num > 1 && [...Array(num - 2)].every((_, i) => num % (i + 2) !== 0);
-        resultado = esPrimo(n1) ? `${n1} es primo` : `${n1} no es primo`;
-      } else if (operacion === 'fibonacci') {
-        const fib = [0, 1];
-        for (let i = 2; i < n1; i++) fib.push(fib[i - 1] + fib[i - 2]);
-        resultado = `Fibonacci (${n1}): ${fib.slice(0, n1).join(', ')}`;
-      }
+        if (operacion === "básicas") {
+            if (subOperacion === "División") {
+                resultado = "Función de división seleccionada.";
+                // Lógica de división
+            } else if (subOperacion === "MCM") {
+                resultado = "Función de MCM seleccionada.";
+                // Lógica de MCM
+            } else if (subOperacion === "MCD") {
+                resultado = "Función de MCD seleccionada.";
+                // Lógica de MCD
+            } else if (subOperacion === "Verificar primo") {
+                resultado = "Función de verificar primo seleccionada.";
+                // Lógica de verificar primo
+            }
+        } else if (operacion === "sucesiones") {
+            if (subOperacion === "Secuencia Fibonacci") {
+                resultado = "Función de Fibonacci seleccionada.";
+                // Lógica de Fibonacci
+            } else if (subOperacion === "Congruencia") {
+                resultado = "Función de congruencia seleccionada.";
+                // Lógica de congruencia
+            } else if (subOperacion === "Teorema de Euler") {
+                resultado = "Función de Euler seleccionada.";
+                // Lógica de Euler
+            } else if (subOperacion === "Sucesión aritmética") {
+                resultado = "Función de sucesión aritmética seleccionada.";
+                // Lógica de sucesión aritmética
+            } else if (subOperacion === "Sucesión geométrica") {
+                resultado = "Función de sucesión geométrica seleccionada.";
+                // Lógica de sucesión geométrica
+            }
+        } else if (operacion === "orden") {
+            if (subOperacion === "Números ascendentes") {
+                resultado = "Función de números ascendentes seleccionada.";
+                // Lógica de números ascendentes
+            } else if (subOperacion === "Números descendentes") {
+                resultado = "Función de números descendentes seleccionada.";
+                // Lógica de números descendentes
+            }
+        } else if (operacion === "probabilidad") {
+            if (subOperacion === "Permutación") {
+                resultado = "Función de permutación seleccionada.";
+                // Lógica de permutación
+            } else if (subOperacion === "Combinación") {
+                resultado = "Función de combinación seleccionada.";
+                // Lógica de combinación
+            }
+        }
 
-      document.getElementById('resultado').innerText = resultado;
+        resultadoTextArea.value = resultado;
     }
 
-    function mcd(a, b) {
-      return b ? mcd(b, a % b) : a;
-    }
-  </script>
+    // Inicializar las suboperaciones al cargar la página
+    actualizarSubOperaciones();
+</script>
+
 </body>
 </html>
