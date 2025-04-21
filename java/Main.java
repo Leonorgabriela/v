@@ -1,199 +1,145 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CalculadoraMatematica extends JFrame {
-    private JPanel panelPrincipal;
-    private JComboBox<String> comboCategoria;
-    private JComboBox<String> comboOperacion;
-    private JTextArea textResultado;
-    private JTextField input1;
-    private JTextField input2;
-    private JButton btnCalcular;
+public class CalculadoraGUI {
+    private JFrame frame;
+    private JComboBox<String> operacionesComboBox;
+    private JComboBox<String> subOperacionesComboBox;
+    private JTextArea resultadoArea;
+    private JButton calcularButton;
 
-    public CalculadoraMatematica() {
-        setTitle("Calculadora Matemática");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    public CalculadoraGUI() {
+        frame = new JFrame("Calculadora Matemática");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+        frame.setLayout(null);
 
-        panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new GridLayout(7, 2, 10, 10));
+        JLabel operacionesLabel = new JLabel("Selecciona una operación:");
+        operacionesLabel.setBounds(10, 20, 200, 25);
+        frame.add(operacionesLabel);
 
-        comboCategoria = new JComboBox<>(new String[] {"Seleccione una categoría", "Operaciones básicas", "Sucesiones", "Orden", "Probabilidad"});
-        comboOperacion = new JComboBox<>();
+        String[] operaciones = {"Operaciones básicas", "Sucesiones", "Orden", "Probabilidad"};
+        operacionesComboBox = new JComboBox<>(operaciones);
+        operacionesComboBox.setBounds(180, 20, 200, 25);
+        frame.add(operacionesComboBox);
 
-        input1 = new JTextField();
-        input2 = new JTextField();
-        btnCalcular = new JButton("Calcular");
-        textResultado = new JTextArea();
-        textResultado.setLineWrap(true);
-        textResultado.setWrapStyleWord(true);
+        JLabel subOperacionesLabel = new JLabel("Selecciona una suboperación:");
+        subOperacionesLabel.setBounds(10, 60, 200, 25);
+        frame.add(subOperacionesLabel);
 
-        panelPrincipal.add(new JLabel("Categoría:"));
-        panelPrincipal.add(comboCategoria);
-        panelPrincipal.add(new JLabel("Operación:"));
-        panelPrincipal.add(comboOperacion);
-        panelPrincipal.add(new JLabel("Número 1:"));
-        panelPrincipal.add(input1);
-        panelPrincipal.add(new JLabel("Número 2:"));
-        panelPrincipal.add(input2);
-        panelPrincipal.add(btnCalcular);
-        panelPrincipal.add(new JScrollPane(textResultado));
+        subOperacionesComboBox = new JComboBox<>();
+        subOperacionesComboBox.setBounds(180, 60, 200, 25);
+        frame.add(subOperacionesComboBox);
 
-        add(panelPrincipal);
+        calcularButton = new JButton("Calcular");
+        calcularButton.setBounds(10, 100, 200, 25);
+        frame.add(calcularButton);
 
-        comboCategoria.addActionListener(e -> actualizarOperaciones());
-        btnCalcular.addActionListener(e -> calcularOperacion());
-    }
+        resultadoArea = new JTextArea();
+        resultadoArea.setBounds(10, 140, 360, 200);
+        resultadoArea.setEditable(false);
+        frame.add(resultadoArea);
 
-    private void actualizarOperaciones() {
-        String categoria = (String) comboCategoria.getSelectedItem();
-        comboOperacion.removeAllItems();
-
-        if ("Operaciones básicas".equals(categoria)) {
-            comboOperacion.addItem("MCM");
-            comboOperacion.addItem("MCD");
-            comboOperacion.addItem("División");
-            comboOperacion.addItem("Número Primo");
-        } else if ("Sucesiones".equals(categoria)) {
-            comboOperacion.addItem("Sucesión Aritmética");
-            comboOperacion.addItem("Sucesión Geométrica");
-        } else if ("Orden".equals(categoria)) {
-            comboOperacion.addItem("Ordenar Números");
-        } else if ("Probabilidad".equals(categoria)) {
-            comboOperacion.addItem("Probabilidad Simple");
-        }
-    }
-
-    private void calcularOperacion() {
-        String operacion = (String) comboOperacion.getSelectedItem();
-
-        try {
-            int num1 = Integer.parseInt(input1.getText());
-            int num2 = Integer.parseInt(input2.getText());
-
-            switch (operacion) {
-                case "MCM":
-                    textResultado.setText(explicarMCM(num1, num2));
-                    break;
-                case "MCD":
-                    textResultado.setText(explicarMCD(num1, num2));
-                    break;
-                case "División":
-                    if (num2 != 0) {
-                        double resultado = (double) num1 / num2;
-                        textResultado.setText("Operación: " + num1 + " ÷ " + num2 + "\nResultado: " + resultado);
-                    } else {
-                        textResultado.setText("❌ No se puede dividir por cero.");
-                    }
-                    break;
-                case "Número Primo":
-                    textResultado.setText(explicarPrimo(num1) + "\n\n" + explicarPrimo(num2));
-                    break;
-                case "Sucesión Aritmética":
-                    textResultado.setText(generarSucesionAritmetica(num1, num2));
-                    break;
-                case "Sucesión Geométrica":
-                    textResultado.setText(generarSucesionGeometrica(num1, num2));
-                    break;
-                case "Ordenar Números":
-                    textResultado.setText("Números ingresados: " + num1 + ", " + num2 + "\n" + ordenarNumeros(num1, num2));
-                    break;
-                case "Probabilidad Simple":
-                    textResultado.setText(calcularProbabilidad(num1, num2));
-                    break;
-                default:
-                    textResultado.setText("Seleccione una operación válida.");
-                    break;
+        operacionesComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarSubOperaciones();
             }
-        } catch (NumberFormatException ex) {
-            textResultado.setText("⚠️ Por favor ingrese números válidos.");
-        }
-    }
+        });
 
-    // Método para calcular el MCD
-    private String explicarMCD(int a, int b) {
-        StringBuilder sb = new StringBuilder("📘 Proceso para calcular el MCD:\n");
-        int originalA = a, originalB = b;
-        while (b != 0) {
-            sb.append("MCD(").append(a).append(", ").append(b).append(") → ");
-            int temp = b;
-            b = a % b;
-            a = temp;
-            sb.append("nuevo b = ").append(b).append("\n");
-        }
-        sb.append("\n✅ Resultado: El MCD de ").append(originalA).append(" y ").append(originalB).append(" es: ").append(a);
-        return sb.toString();
-    }
-
-    // Método para calcular el MCM
-    private String explicarMCM(int a, int b) {
-        int mcd = calcularMCD(a, b);
-        int mcm = (a * b) / mcd;
-        return "📘 Proceso para calcular el MCM:\n" +
-               "Paso 1: Calcular el MCD de " + a + " y " + b + " → " + mcd + "\n" +
-               "Paso 2: Usar fórmula: (a × b) / MCD\n" +
-               "→ (" + a + " × " + b + ") / " + mcd + " = " + mcm + "\n" +
-               "✅ Resultado: El MCM de " + a + " y " + b + " es: " + mcm;
-    }
-
-    // Método para verificar si un número es primo
-    private String explicarPrimo(int num) {
-        if (num <= 1) return num + " ❌ no es primo (los primos son mayores que 1)";
-        StringBuilder sb = new StringBuilder("🔍 Verificando si " + num + " es primo:\n");
-        for (int i = 2; i <= Math.sqrt(num); i++) {
-            if (num % i == 0) {
-                sb.append(num).append(" es divisible entre ").append(i).append(" → ❌ No es primo");
-                return sb.toString();
+        calcularButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                realizarOperacion();
             }
-            sb.append(num).append(" no es divisible entre ").append(i).append("\n");
+        });
+
+        frame.setVisible(true);
+    }
+
+    private void actualizarSubOperaciones() {
+        String opcion = (String) operacionesComboBox.getSelectedItem();
+        subOperacionesComboBox.removeAllItems();
+
+        if (opcion.equals("Operaciones básicas")) {
+            subOperacionesComboBox.addItem("División");
+            subOperacionesComboBox.addItem("MCM");
+            subOperacionesComboBox.addItem("MCD");
+            subOperacionesComboBox.addItem("Verificar primo");
+        } else if (opcion.equals("Sucesiones")) {
+            subOperacionesComboBox.addItem("Secuencia Fibonacci");
+            subOperacionesComboBox.addItem("Congruencia");
+            subOperacionesComboBox.addItem("Teorema de Euler");
+            subOperacionesComboBox.addItem("Sucesión aritmética");
+            subOperacionesComboBox.addItem("Sucesión geométrica");
+        } else if (opcion.equals("Orden")) {
+            subOperacionesComboBox.addItem("Números ascendentes");
+            subOperacionesComboBox.addItem("Números descendentes");
+        } else if (opcion.equals("Probabilidad")) {
+            subOperacionesComboBox.addItem("Permutación");
+            subOperacionesComboBox.addItem("Combinación");
         }
-        sb.append("✅ ").append(num).append(" es primo");
-        return sb.toString();
     }
 
-    // Método para generar una sucesión aritmética
-    private String generarSucesionAritmetica(int a, int d) {
-        StringBuilder sb = new StringBuilder("📘 Sucesión Aritmética (inicio = " + a + ", diferencia = " + d + "):\n");
-        for (int i = 0; i < 10; i++) {
-            sb.append(a + i * d).append(" ");
+    private void realizarOperacion() {
+        String operacion = (String) operacionesComboBox.getSelectedItem();
+        String subOperacion = (String) subOperacionesComboBox.getSelectedItem();
+        String resultado = "";
+
+        if (operacion.equals("Operaciones básicas")) {
+            if (subOperacion.equals("División")) {
+                resultado = "Función de división seleccionada.";
+                // Implementar lógica de división
+            } else if (subOperacion.equals("MCM")) {
+                resultado = "Función de MCM seleccionada.";
+                // Implementar lógica de MCM
+            } else if (subOperacion.equals("MCD")) {
+                resultado = "Función de MCD seleccionada.";
+                // Implementar lógica de MCD
+            } else if (subOperacion.equals("Verificar primo")) {
+                resultado = "Función de verificar primo seleccionada.";
+                // Implementar lógica de verificar primo
+            }
+        } else if (operacion.equals("Sucesiones")) {
+            if (subOperacion.equals("Secuencia Fibonacci")) {
+                resultado = "Función de Fibonacci seleccionada.";
+                // Implementar lógica de Fibonacci
+            } else if (subOperacion.equals("Congruencia")) {
+                resultado = "Función de congruencia seleccionada.";
+                // Implementar lógica de congruencia
+            } else if (subOperacion.equals("Teorema de Euler")) {
+                resultado = "Función de Euler seleccionada.";
+                // Implementar lógica de Euler
+            } else if (subOperacion.equals("Sucesión aritmética")) {
+                resultado = "Función de sucesión aritmética seleccionada.";
+                // Implementar lógica de sucesión aritmética
+            } else if (subOperacion.equals("Sucesión geométrica")) {
+                resultado = "Función de sucesión geométrica seleccionada.";
+                // Implementar lógica de sucesión geométrica
+            }
+        } else if (operacion.equals("Orden")) {
+            if (subOperacion.equals("Números ascendentes")) {
+                resultado = "Función de números ascendentes seleccionada.";
+                // Implementar lógica de números ascendentes
+            } else if (subOperacion.equals("Números descendentes")) {
+                resultado = "Función de números descendentes seleccionada.";
+                // Implementar lógica de números descendentes
+            }
+        } else if (operacion.equals("Probabilidad")) {
+            if (subOperacion.equals("Permutación")) {
+                resultado = "Función de permutación seleccionada.";
+                // Implementar lógica de permutación
+            } else if (subOperacion.equals("Combinación")) {
+                resultado = "Función de combinación seleccionada.";
+                // Implementar lógica de combinación
+            }
         }
-        return sb.toString();
-    }
 
-    // Método para generar una sucesión geométrica
-    private String generarSucesionGeometrica(int a, int r) {
-        StringBuilder sb = new StringBuilder("📘 Sucesión Geométrica (inicio = " + a + ", razón = " + r + "):\n");
-        for (int i = 0; i < 10; i++) {
-            sb.append((int)(a * Math.pow(r, i))).append(" ");
-        }
-        return sb.toString();
-    }
-
-    // Método para ordenar los números
-    private String ordenarNumeros(int a, int b) {
-        int menor = Math.min(a, b);
-        int mayor = Math.max(a, b);
-        return "✅ Orden: " + menor + ", " + mayor;
-    }
-
-    // Método para calcular la probabilidad
-    private String calcularProbabilidad(int favorables, int posibles) {
-        if (posibles == 0) return "⚠️ Los casos posibles no pueden ser cero.";
-        double probabilidad = (double) favorables / posibles;
-        return "📘 Proceso:\n" +
-               "Casos favorables: " + favorables + "\n" +
-               "Casos posibles: " + posibles + "\n" +
-               "Fórmula: P = favorables / posibles\n" +
-               "→ P = " + favorables + "/" + posibles + " = " + probabilidad + "\n" +
-               "✅ Probabilidad simple: " + probabilidad;
+        resultadoArea.setText(resultado);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new CalculadoraMatematica().setVisible(true);
-        });
+        new CalculadoraGUI();
     }
 }
