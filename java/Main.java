@@ -76,25 +76,21 @@ public class CalculadoraMatematica extends JFrame {
 
             switch (operacion) {
                 case "MCM":
-                    int mcm = calcularMCM(num1, num2);
-                    textResultado.setText("El MCM de " + num1 + " y " + num2 + " es: " + mcm);
+                    textResultado.setText(explicarMCM(num1, num2));
                     break;
                 case "MCD":
-                    int mcd = calcularMCD(num1, num2);
-                    textResultado.setText("El MCD de " + num1 + " y " + num2 + " es: " + mcd);
+                    textResultado.setText(explicarMCD(num1, num2));
                     break;
                 case "División":
                     if (num2 != 0) {
                         double resultado = (double) num1 / num2;
-                        textResultado.setText("El resultado de la división es: " + resultado);
+                        textResultado.setText("Operación: " + num1 + " ÷ " + num2 + "\nResultado: " + resultado);
                     } else {
-                        textResultado.setText("No se puede dividir por cero.");
+                        textResultado.setText("❌ No se puede dividir por cero.");
                     }
                     break;
                 case "Número Primo":
-                    boolean primo1 = esPrimo(num1);
-                    boolean primo2 = esPrimo(num2);
-                    textResultado.setText(num1 + (primo1 ? " es primo" : " no es primo") + "\n" + num2 + (primo2 ? " es primo" : " no es primo"));
+                    textResultado.setText(explicarPrimo(num1) + "\n\n" + explicarPrimo(num2));
                     break;
                 case "Sucesión Aritmética":
                     textResultado.setText(generarSucesionAritmetica(num1, num2));
@@ -103,7 +99,7 @@ public class CalculadoraMatematica extends JFrame {
                     textResultado.setText(generarSucesionGeometrica(num1, num2));
                     break;
                 case "Ordenar Números":
-                    textResultado.setText(ordenarNumeros(num1, num2));
+                    textResultado.setText("Números ingresados: " + num1 + ", " + num2 + "\n" + ordenarNumeros(num1, num2));
                     break;
                 case "Probabilidad Simple":
                     textResultado.setText(calcularProbabilidad(num1, num2));
@@ -113,57 +109,86 @@ public class CalculadoraMatematica extends JFrame {
                     break;
             }
         } catch (NumberFormatException ex) {
-            textResultado.setText("Por favor ingrese números válidos.");
+            textResultado.setText("⚠️ Por favor ingrese números válidos.");
         }
     }
 
-    private int calcularMCD(int a, int b) {
+    // Método para calcular el MCD
+    private String explicarMCD(int a, int b) {
+        StringBuilder sb = new StringBuilder("📘 Proceso para calcular el MCD:\n");
+        int originalA = a, originalB = b;
         while (b != 0) {
-            int t = b;
+            sb.append("MCD(").append(a).append(", ").append(b).append(") → ");
+            int temp = b;
             b = a % b;
-            a = t;
+            a = temp;
+            sb.append("nuevo b = ").append(b).append("\n");
         }
-        return a;
+        sb.append("\n✅ Resultado: El MCD de ").append(originalA).append(" y ").append(originalB).append(" es: ").append(a);
+        return sb.toString();
     }
 
-    private int calcularMCM(int a, int b) {
-        return (a * b) / calcularMCD(a, b);
+    // Método para calcular el MCM
+    private String explicarMCM(int a, int b) {
+        int mcd = calcularMCD(a, b);
+        int mcm = (a * b) / mcd;
+        return "📘 Proceso para calcular el MCM:\n" +
+               "Paso 1: Calcular el MCD de " + a + " y " + b + " → " + mcd + "\n" +
+               "Paso 2: Usar fórmula: (a × b) / MCD\n" +
+               "→ (" + a + " × " + b + ") / " + mcd + " = " + mcm + "\n" +
+               "✅ Resultado: El MCM de " + a + " y " + b + " es: " + mcm;
     }
 
-    private boolean esPrimo(int num) {
-        if (num <= 1) return false;
+    // Método para verificar si un número es primo
+    private String explicarPrimo(int num) {
+        if (num <= 1) return num + " ❌ no es primo (los primos son mayores que 1)";
+        StringBuilder sb = new StringBuilder("🔍 Verificando si " + num + " es primo:\n");
         for (int i = 2; i <= Math.sqrt(num); i++) {
-            if (num % i == 0) return false;
+            if (num % i == 0) {
+                sb.append(num).append(" es divisible entre ").append(i).append(" → ❌ No es primo");
+                return sb.toString();
+            }
+            sb.append(num).append(" no es divisible entre ").append(i).append("\n");
         }
-        return true;
+        sb.append("✅ ").append(num).append(" es primo");
+        return sb.toString();
     }
 
+    // Método para generar una sucesión aritmética
     private String generarSucesionAritmetica(int a, int d) {
-        StringBuilder sb = new StringBuilder("Sucesión Aritmética:\n");
+        StringBuilder sb = new StringBuilder("📘 Sucesión Aritmética (inicio = " + a + ", diferencia = " + d + "):\n");
         for (int i = 0; i < 10; i++) {
             sb.append(a + i * d).append(" ");
         }
         return sb.toString();
     }
 
+    // Método para generar una sucesión geométrica
     private String generarSucesionGeometrica(int a, int r) {
-        StringBuilder sb = new StringBuilder("Sucesión Geométrica:\n");
+        StringBuilder sb = new StringBuilder("📘 Sucesión Geométrica (inicio = " + a + ", razón = " + r + "):\n");
         for (int i = 0; i < 10; i++) {
             sb.append((int)(a * Math.pow(r, i))).append(" ");
         }
         return sb.toString();
     }
 
+    // Método para ordenar los números
     private String ordenarNumeros(int a, int b) {
         int menor = Math.min(a, b);
         int mayor = Math.max(a, b);
-        return "Números ordenados: " + menor + ", " + mayor;
+        return "✅ Orden: " + menor + ", " + mayor;
     }
 
+    // Método para calcular la probabilidad
     private String calcularProbabilidad(int favorables, int posibles) {
-        if (posibles == 0) return "Los casos posibles no pueden ser cero.";
+        if (posibles == 0) return "⚠️ Los casos posibles no pueden ser cero.";
         double probabilidad = (double) favorables / posibles;
-        return "La probabilidad es: " + probabilidad;
+        return "📘 Proceso:\n" +
+               "Casos favorables: " + favorables + "\n" +
+               "Casos posibles: " + posibles + "\n" +
+               "Fórmula: P = favorables / posibles\n" +
+               "→ P = " + favorables + "/" + posibles + " = " + probabilidad + "\n" +
+               "✅ Probabilidad simple: " + probabilidad;
     }
 
     public static void main(String[] args) {
