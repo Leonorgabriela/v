@@ -2,7 +2,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CalculadoraGUI {
+public class Main {  // Esta es la clase principal
+    public static void main(String[] args) {
+        new CalculadoraGUI();  // Llamamos al constructor de la clase CalculadoraGUI
+    }
+}
+
+class CalculadoraGUI {  // Aquí está el código de la calculadora
     private JFrame frame;
     private JComboBox<String> operacionesComboBox;
     private JComboBox<String> subOperacionesComboBox;
@@ -137,9 +143,5 @@ public class CalculadoraGUI {
         }
 
         resultadoArea.setText(resultado);
-    }
-
-    public static void main(String[] args) {
-        new CalculadoraGUI();
     }
 }
