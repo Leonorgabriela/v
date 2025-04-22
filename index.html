@@ -151,7 +151,7 @@
                         <input type="number" id="input3" placeholder="Módulo N / Posición">
                         <button id="submitBtn">Aceptar</button>
                     `;
-                    inputHelp.innerText = "Esta operación necesita tres entradas.";
+                    inputHelp.innerText = "Esta operación necesita tres entradas. Solo Fibonacci usa una.";
                     break;
                 case "2":
                     inputContainer.innerHTML = `
@@ -179,7 +179,6 @@
             }
         }
 
-        // FUNCIONES LÓGICAS
         function handleBasicOperations() {
             const op = document.getElementById('basicOperations').value;
             const n1 = parseInt(document.getElementById('input1').value);
@@ -207,27 +206,50 @@
             const b = parseInt(document.getElementById('input2').value);
             const n = parseInt(document.getElementById('input3').value);
 
-            if ([a, b, n].some(x => isNaN(x))) {
-                result.innerText = "Por favor completa todos los campos.";
-                result.style.display = "block";
-                return;
-            }
-
             let output = "";
             switch (op) {
-                case "0": // Fibonacci
+                case "0":
+                    if (isNaN(a)) {
+                        result.innerText = "Por favor ingrese el número de términos para Fibonacci.";
+                        result.style.display = "block";
+                        return;
+                    }
                     let fib = [0, 1];
                     for (let i = 2; i < a; i++) fib.push(fib[i - 1] + fib[i - 2]);
                     output = `Fibonacci (${a}): ${fib.slice(0, a).join(', ')}`;
                     break;
-                case "1": output = `${a} ≡ ${a % n} (mod ${n})`; break;
-                case "2": output = `${a}^${b} mod ${n} = ${modExp(a, b, n)}`; break;
-                case "3": // Sucesión aritmética
+                case "1":
+                    if ([a, n].some(x => isNaN(x))) {
+                        result.innerText = "Por favor completa los campos requeridos.";
+                        result.style.display = "block";
+                        return;
+                    }
+                    output = `${a} ≡ ${a % n} (mod ${n})`;
+                    break;
+                case "2":
+                    if ([a, b, n].some(x => isNaN(x))) {
+                        result.innerText = "Por favor completa los campos requeridos.";
+                        result.style.display = "block";
+                        return;
+                    }
+                    output = `${a}^${b} mod ${n} = ${modExp(a, b, n)}`;
+                    break;
+                case "3":
+                    if ([a, b, n].some(x => isNaN(x))) {
+                        result.innerText = "Por favor completa los campos requeridos.";
+                        result.style.display = "block";
+                        return;
+                    }
                     const d = (b - a) / (n - 1);
                     const arit = Array.from({ length: n }, (_, i) => a + i * d);
                     output = `Sucesión aritmética: ${arit.join(', ')}`;
                     break;
-                case "4": // Sucesión geométrica
+                case "4":
+                    if ([a, b, n].some(x => isNaN(x))) {
+                        result.innerText = "Por favor completa los campos requeridos.";
+                        result.style.display = "block";
+                        return;
+                    }
                     const r = Math.pow(b / a, 1 / (n - 1));
                     const geo = Array.from({ length: n }, (_, i) => (a * Math.pow(r, i)).toFixed(2));
                     output = `Sucesión geométrica: ${geo.join(', ')}`;
@@ -278,10 +300,17 @@
             result.style.display = "block";
         }
 
-        // FUNCIONES AUXILIARES
         const mcd = (a, b) => b === 0 ? a : mcd(b, a % b);
         const mcm = (a, b) => (a * b) / mcd(a, b);
-        const isPrime = n => n > 1 && [...Array(Math.floor(Math.sqrt(n))).keys()].slice(1).every(i => n % i !== 0);
+        const isPrime = n => {
+            if (n <= 1) return false;
+            if (n <= 3) return true;
+            if (n % 2 === 0 || n % 3 === 0) return false;
+            for (let i = 5; i * i <= n; i += 6) {
+                if (n % i === 0 || n % (i + 2) === 0) return false;
+            }
+            return true;
+        };
         const modExp = (a, b, n) => {
             let res = 1;
             a = a % n;
@@ -292,12 +321,6 @@
             }
             return res;
         };
-
-        actualizarInterfaz();
-    </script>
-</body>
-</html>
-
 
         actualizarInterfaz();
     </script>
