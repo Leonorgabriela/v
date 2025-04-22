@@ -3,176 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Matemática</title>
+    <title>🧠 Calculadora Matemática</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            padding: 20px;
             background-color: #f4f4f9;
         }
-
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            width: 400px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-        }
-
-        label, select, button {
-            width: 100%;
-            margin: 10px 0;
-        }
-
-        button {
+        select, input, button {
             padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
+            margin: 10px;
             font-size: 16px;
         }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        textarea {
-            width: 100%;
-            height: 150px;
-            resize: none;
+        #result {
+            margin-top: 20px;
             padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-top: 10px;
-            background-color: #f9f9f9;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Calculadora Matemática</h1>
-    
-    <label for="operacion">Selecciona una operación:</label>
-    <select id="operacion">
-        <option value="básicas">Operaciones básicas</option>
-        <option value="sucesiones">Sucesiones</option>
-        <option value="orden">Orden</option>
-        <option value="probabilidad">Probabilidad</option>
-    </select>
+<h1>Calculadora Matemática</h1>
 
-    <label for="subOperacion">Selecciona una suboperación:</label>
-    <select id="subOperacion">
-        <!-- Las suboperaciones se llenarán dinámicamente -->
-    </select>
+<!-- Menú principal -->
+<select id="mainMenu">
+    <option value="0">Operaciones básicas</option>
+    <option value="1">Sucesiones</option>
+    <option value="2">Orden</option>
+    <option value="3">Probabilidad</option>
+</select>
 
-    <button onclick="calcular()">Calcular</button>
+<!-- Área para ingresar datos según el menú -->
+<div id="inputContainer"></div>
 
-    <textarea id="resultado" placeholder="Resultado aparecerá aquí..." disabled></textarea>
-</div>
+<!-- Área de resultados -->
+<div id="result" style="display:none;"></div>
 
 <script>
-    const operacionSelect = document.getElementById("operacion");
-    const subOperacionSelect = document.getElementById("subOperacion");
-    const resultadoTextArea = document.getElementById("resultado");
+    const mainMenu = document.getElementById('mainMenu');
+    const inputContainer = document.getElementById('inputContainer');
+    const result = document.getElementById('result');
 
-    operacionSelect.addEventListener("change", actualizarSubOperaciones);
+    mainMenu.addEventListener('change', function() {
+        const selectedOption = mainMenu.value;
+        result.style.display = "none"; // Ocultar resultados previos
+        inputContainer.innerHTML = ''; // Limpiar el contenedor
 
-    function actualizarSubOperaciones() {
-        const operacion = operacionSelect.value;
-        subOperacionSelect.innerHTML = "";  // Limpiar opciones anteriores
-
-        let opciones = [];
-
-        if (operacion === "básicas") {
-            opciones = ["División", "MCM", "MCD", "Verificar primo"];
-        } else if (operacion === "sucesiones") {
-            opciones = ["Secuencia Fibonacci", "Congruencia", "Teorema de Euler", "Sucesión aritmética", "Sucesión geométrica"];
-        } else if (operacion === "orden") {
-            opciones = ["Números ascendentes", "Números descendentes"];
-        } else if (operacion === "probabilidad") {
-            opciones = ["Permutación", "Combinación"];
+        switch (selectedOption) {
+            case "0": // Operaciones básicas
+                inputContainer.innerHTML = `
+                    <select id="basicOperations">
+                        <option value="0">División</option>
+                        <option value="1">MCM</option>
+                        <option value="2">MCD</option>
+                        <option value="3">Verificar un número primo</option>
+                    </select>
+                    <input type="number" id="input1" placeholder="Número 1">
+                    <input type="number" id="input2" placeholder="Número 2" style="display:none;">
+                    <button id="submitBtn">Aceptar</button>
+                `;
+                break;
+            case "1": // Sucesiones
+                inputContainer.innerHTML = `
+                    <select id="sequences">
+                        <option value="0">Secuencia de Fibonacci</option>
+                        <option value="1">Congruencia</option>
+                        <option value="2">Teorema de Euler</option>
+                        <option value="3">Sucesión aritmética</option>
+                        <option value="4">Sucesión geométrica</option>
+                    </select>
+                    <input type="number" id="input1" placeholder="Ingrese el valor" style="display:block;">
+                    <button id="submitBtn">Aceptar</button>
+                `;
+                break;
+            case "2": // Orden
+                inputContainer.innerHTML = `
+                    <select id="order">
+                        <option value="0">Números Ascendentes</option>
+                        <option value="1">Números Descendentes</option>
+                    </select>
+                    <input type="number" id="input1" placeholder="Ingrese el límite" style="display:block;">
+                    <button id="submitBtn">Aceptar</button>
+                `;
+                break;
+            case "3": // Probabilidad
+                inputContainer.innerHTML = `
+                    <select id="probability">
+                        <option value="0">Permutación</option>
+                        <option value="1">Combinación</option>
+                    </select>
+                    <input type="number" id="input1" placeholder="Ingrese n" style="display:block;">
+                    <input type="number" id="input2" placeholder="Ingrese r" style="display:block;">
+                    <button id="submitBtn">Aceptar</button>
+                `;
+                break;
         }
 
-        // Añadir las opciones al select de suboperaciones
-        opciones.forEach(opcion => {
-            const option = document.createElement("option");
-            option.value = opcion;
-            option.textContent = opcion;
-            subOperacionSelect.appendChild(option);
-        });
-    }
+        // Mostrar botón de aceptar
+        document.getElementById('submitBtn').style.display = "block";
+    });
 
-    function calcular() {
-        const operacion = operacionSelect.value;
-        const subOperacion = subOperacionSelect.value;
-        let resultado = "";
+    document.addEventListener('click', function(event) {
+        if (event.target && event.target.id === 'submitBtn') {
+            const selectedOption = mainMenu.value;
+            const input1 = document.getElementById('input1').value;
+            const input2 = document.getElementById('input2') ? document.getElementById('input2').value : null;
 
-        if (operacion === "básicas") {
-            if (subOperacion === "División") {
-                resultado = "Función de división seleccionada.";
-                // Lógica de división
-            } else if (subOperacion === "MCM") {
-                resultado = "Función de MCM seleccionada.";
-                // Lógica de MCM
-            } else if (subOperacion === "MCD") {
-                resultado = "Función de MCD seleccionada.";
-                // Lógica de MCD
-            } else if (subOperacion === "Verificar primo") {
-                resultado = "Función de verificar primo seleccionada.";
-                // Lógica de verificar primo
+            // Realizar las operaciones según la opción seleccionada
+            if (input1 === "") {
+                result.innerHTML = "Por favor ingrese un valor válido.";
+                result.style.display = "block";
+                return;
             }
-        } else if (operacion === "sucesiones") {
-            if (subOperacion === "Secuencia Fibonacci") {
-                resultado = "Función de Fibonacci seleccionada.";
-                // Lógica de Fibonacci
-            } else if (subOperacion === "Congruencia") {
-                resultado = "Función de congruencia seleccionada.";
-                // Lógica de congruencia
-            } else if (subOperacion === "Teorema de Euler") {
-                resultado = "Función de Euler seleccionada.";
-                // Lógica de Euler
-            } else if (subOperacion === "Sucesión aritmética") {
-                resultado = "Función de sucesión aritmética seleccionada.";
-                // Lógica de sucesión aritmética
-            } else if (subOperacion === "Sucesión geométrica") {
-                resultado = "Función de sucesión geométrica seleccionada.";
-                // Lógica de sucesión geométrica
-            }
-        } else if (operacion === "orden") {
-            if (subOperacion === "Números ascendentes") {
-                resultado = "Función de números ascendentes seleccionada.";
-                // Lógica de números ascendentes
-            } else if (subOperacion === "Números descendentes") {
-                resultado = "Función de números descendentes seleccionada.";
-                // Lógica de números descendentes
-            }
-        } else if (operacion === "probabilidad") {
-            if (subOperacion === "Permutación") {
-                resultado = "Función de permutación seleccionada.";
-                // Lógica de permutación
-            } else if (subOperacion === "Combinación") {
-                resultado = "Función de combinación seleccionada.";
-                // Lógica de combinación
+
+            switch (selectedOption) {
+                case "0": // Operaciones básicas
+                    handleBasicOperations(input1, input2);
+                    break;
+                case "1": // Sucesiones
+                    handleSequences(input1);
+                    break;
+                case "2": // Orden
+                    handleOrder(input1);
+                    break;
+                case "3": // Probabilidad
+                    handleProbability(input1, input2);
+                    break;
             }
         }
+    });
 
-        resultadoTextArea.value = resultado;
+    function handleBasicOperations(input1, input2) {
+        const operation = document.getElementById('basicOperations').value;
+        const num1 = parseFloat(input1);
+        const num2 = input2 ? parseFloat(input2) : null;
+
+        switch (operation) {
+            case "0": // División
+                if (num2 !== 0) {
+                    result.innerHTML = `El resultado de la división es: ${num1 / num2}`;
+                } else {
+                    result.innerHTML = "No se puede dividir entre 0.";
+                }
+                break;
+            case "1": // MCM
+                result.innerHTML = `El MCM de ${num1} y ${num2} es: ${mcm(num1, num2)}`;
+                break;
+            case "2": // MCD
+                result.innerHTML = `El MCD de ${num1} y ${num2} es: ${mcd(num1, num2)}`;
+                break;
+            case "3": // Verificar número primo
+                result.innerHTML = `${num1} ${isPrime(num1) ? 'es' : 'no es'} un número primo.`;
+                break;
+        }
+
+        result.style.display = "block";
     }
 
-    // Inicializar las suboperaciones al cargar la página
-    actualizarSubOperaciones();
+    function handleSequences(input1) {
+        const sequenceType = document.getElementById('sequences').value;
+        const value = parseInt(input1);
+
+        switch (sequenceType) {
+            case "0": // Secuencia de Fibonacci
+                result.innerHTML = `Secuencia de Fibonacci: ${fibonacci(value)}`;
+                break;
+            case "1": // Congruencia
+                result.innerHTML = `Congruencia: ${value % 2 === 0 ? "Par" : "Impar"}`;
+                break;
+            case "2": // Teorema de Euler
+                result.innerHTML = `Valor de Euler(φ(${value})): ${euler(value)}`;
+                break;
+            case "3": // Sucesión Aritmética
+                result.innerHTML = `Sucesión aritmética: ${arithmeticSequence(value)}`;
+                break;
+            case "4": // Sucesión Geométrica
+                result.innerHTML = `Sucesión geométrica: ${geometricSequence(value)}`;
+                break;
+        }
+
+        result.style.display = "block";
+    }
+
+    function handleOrder(input1) {
+        const orderType = document.getElementById('order').value;
+        const n = parseInt(input1);
+
+        switch (orderType) {
+            case "0": // Ascendentes
+                result.innerHTML = `Números ascendentes: ${ascendingNumbers(n)}`;
+                break;
+            case "1": // Descendentes
+                result.innerHTML = `Números descendentes: ${descendingNumbers(n)}`;
+                break;
+        }
+
+        result.style.display = "block";
+    }
+
+    function handleProbability(input1, input2) {
+        const probabilityType = document.getElementById('probability').value;
+        const n = parseInt(input1);
+        const r = parseInt(input2);
+
+        switch (probabilityType) {
+            case "0": // Permutación
+                result.innerHTML = `Permutación de ${n} objetos tomados de ${r}: ${permutation(n, r)}`;
+                break;
+            case "1": // Combinación
+                result.innerHTML = `Combinación de ${n} objetos tomados de ${r}: ${combination(n, r)}`;
+                break;
+        }
+
+        result.style.display = "block";
+    }
+
+    // Funciones matemáticas
+    function mcm(a, b) {
+        return (a * b) / mcd(a, b);
+    }
+
+    function mcd(a, b) {
+        while (b != 0) {
+            const temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    function isPrime(num) {
+        if (num <= 1) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) return false;
+        }
+        return true;
+    }
+
+    function fibonacci(n) {
+        let a = 0, b = 1, result = '';
+        for (let i = 0; i < n; i++) {
+            result += a + ' ';
+            const next = a + b;
+            a = b;
+            b = next;
+        }
+        return result;
+    }
+
+    function euler(n) {
+        let result = n;
+        for (let i = 2; i * i <= n; i++) {
+            if (n % i === 0) {
+                while (n % i === 0) n /= i;
+                result -= result / i;
+            }
+        }
+        if (n > 1) result -= result / n;
+        return result;
+    }
+
+    function arithmeticSequence(n) {
+        let result = '';
+        for (let i = 0; i < 10; i++) {
+            result += (n + i) + ' ';
+        }
+        return result;
+    }
+
+    function geometricSequence(n) {
+        let result = '';
+        for (let i = 0; i < 10; i++) {
+            result += (n * Math.pow(2, i)) + ' ';
+        }
+        return result;
+    }
+
+    function ascendingNumbers(n) {
+        let result = '';
+        for (let i = 1; i <= n; i++) {
+            result += i + ' ';
+        }
+        return result;
+    }
+
+    function descendingNumbers(n) {
+        let result = '';
+        for (let i = n; i >= 1; i--) {
+            result += i + ' ';
+        }
+        return result;
+    }
+
+    function permutation(n, r) {
+        return factorial(n) / factorial(n - r);
+    }
+
+    function combination(n, r) {
+        return factorial(n) / (factorial(r) * factorial(n - r));
+    }
+
+    function factorial(num) {
+        let result = 1;
+        for (let i = 1; i <= num; i++) {
+            result *= i;
+        }
+        return result;
+    }
 </script>
 
 </body>
