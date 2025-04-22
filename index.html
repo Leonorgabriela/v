@@ -7,39 +7,61 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
             background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         select, input, button {
             padding: 10px;
             margin: 10px;
             font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
         }
         #result {
             margin-top: 20px;
             padding: 10px;
             background-color: #e0e0e0;
             border: 1px solid #ccc;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-<h1>Calculadora Matemática</h1>
+<div class="container">
+    <h1>🧠 Calculadora Matemática</h1>
 
-<!-- Menú principal -->
-<select id="mainMenu">
-    <option value="0">Operaciones básicas</option>
-    <option value="1">Sucesiones</option>
-    <option value="2">Orden</option>
-    <option value="3">Probabilidad</option>
-</select>
+    <!-- Menú principal -->
+    <select id="mainMenu">
+        <option value="0">Operaciones básicas</option>
+        <option value="1">Sucesiones</option>
+        <option value="2">Orden</option>
+        <option value="3">Probabilidad</option>
+    </select>
 
-<!-- Área para ingresar datos según el menú -->
-<div id="inputContainer"></div>
+    <!-- Área para ingresar datos según el menú -->
+    <div id="inputContainer"></div>
 
-<!-- Área de resultados -->
-<div id="result" style="display:none;"></div>
+    <!-- Área de resultados -->
+    <div id="result"></div>
+</div>
 
 <script>
     const mainMenu = document.getElementById('mainMenu');
