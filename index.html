@@ -1,412 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>🧠 Calculadora Inteligente</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to right, #e0f7fa, #e1bee7);
-            display: flex;
-            justify-content: center;
-            align-items: start;
-            padding-top: 3rem;
-            min-height: 100vh;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            width: 400px;
-        }
-
-        h2 {
-            text-align: center;
-            color: #4a148c;
-        }
-
-        select, input, button {
-            width: 100%;
-            padding: 0.6rem;
-            margin-top: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-        }
-
-        button {
-            background-color: #7e57c2;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: #5e35b1;
-        }
-
-        #inputHelp {
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 0.5rem;
-        }
-
-        #result {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: #f3e5f5;
-            border-left: 5px solid #ab47bc;
-            display: none;
-            border-radius: 0.5rem;
-            white-space: pre-line;
-        }
-
-        label {
-            margin-top: 1rem;
-            display: block;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Optimización de Buses - Centro Memoria</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #003366;
+    }
+    form {
+      background-color: #fff;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-    <h2>🧠 Calculadora Inteligente</h2>
-    <label for="mainMenu">Selecciona una categoría:</label>
-    <select id="mainMenu">
-        <option value="0">Operaciones básicas</option>
-        <option value="1">Sucesiones</option>
-        <option value="2">Orden</option>
-        <option value="3">Probabilidad</option>
-    </select>
+  <h1>Optimización de Buses - Centro Memoria</h1>
+  
+  <form method="post" action="optimiza">
+    <label for="totalBuses">Buses disponibles:</label>
+    <input type="number" name="totalBuses" id="totalBuses" required>
 
-    <div id="inputContainer"></div>
-    <div id="inputHelp"></div>
-    <div id="result"></div>
-</div>
+    <label for="d0">Demanda K10:</label>
+    <input type="number" name="d0" id="d0" required>
 
-<script>
-    const mainMenu = document.getElementById('mainMenu');
-    const inputContainer = document.getElementById('inputContainer');
-    const inputHelp = document.getElementById('inputHelp');
-    const result = document.getElementById('result');
+    <label for="d1">Demanda L10:</label>
+    <input type="number" name="d1" id="d1" required>
 
-    mainMenu.addEventListener('change', actualizarInterfaz);
+    <label for="d2">Demanda J73:</label>
+    <input type="number" name="d2" id="d2" required>
 
-    document.addEventListener('click', function (event) {
-        if (event.target && event.target.id === 'submitBtn') {
-            const selectedOption = mainMenu.value;
-            switch (selectedOption) {
-                case "0": handleBasicOperations(); break;
-                case "1": handleSequences(); break;
-                case "2": handleOrder(); break;
-                case "3": handleProbability(); break;
-            }
-        }
-    });
-
-    function actualizarInterfaz() {
-        const selectedOption = mainMenu.value;
-        result.style.display = "none";
-        inputContainer.innerHTML = '';
-        inputHelp.innerText = '';
-
-        switch (selectedOption) {
-            case "0":
-                inputContainer.innerHTML = `
-                    <select id="basicOperations">
-                        <option value="0">División</option>
-                        <option value="1">MCM</option>
-                        <option value="2">MCD</option>
-                        <option value="3">Número primo</option>
-                    </select>
-                    <div id="dynamicInputs"></div>
-                    <button id="submitBtn">Aceptar</button>
-                `;
-                document.getElementById('basicOperations').addEventListener('change', mostrarInputsBasicos);
-                mostrarInputsBasicos();
-                break;
-            case "1":
-                inputContainer.innerHTML = `
-                    <select id="sequences">
-                        <option value="0">Fibonacci</option>
-                        <option value="1">Congruencia</option>
-                        <option value="2">Teorema de Euler</option>
-                        <option value="3">Sucesión aritmética</option>
-                        <option value="4">Sucesión geométrica</option>
-                    </select>
-                    <div id="dynamicInputs"></div>
-                    <button id="submitBtn">Aceptar</button>
-                `;
-                document.getElementById('sequences').addEventListener('change', mostrarInputsSucesiones);
-                mostrarInputsSucesiones();
-                break;
-            case "2":
-                inputContainer.innerHTML = `
-                    <select id="order">
-                        <option value="0">Ascendente</option>
-                        <option value="1">Descendente</option>
-                    </select>
-                    <input type="number" id="input1" placeholder="Límite máximo">
-                    <button id="submitBtn">Aceptar</button>
-                `;
-                inputHelp.innerText = "Esta operación necesita un número.";
-                break;
-            case "3":
-                inputContainer.innerHTML = `
-                    <select id="probability">
-                        <option value="0">Permutación</option>
-                        <option value="1">Combinación</option>
-                    </select>
-                    <input type="number" id="input1" placeholder="Ingrese n">
-                    <input type="number" id="input2" placeholder="Ingrese r">
-                    <button id="submitBtn">Aceptar</button>
-                `;
-                inputHelp.innerText = "Esta operación necesita dos números.";
-                break;
-        }
-    }
-
-    function mostrarInputsBasicos() {
-        const tipo = document.getElementById('basicOperations').value;
-        const dynamicInputs = document.getElementById('dynamicInputs');
-
-        if (tipo === "3") {
-            dynamicInputs.innerHTML = `<input type="number" id="input1" placeholder="Número a verificar">`;
-            inputHelp.innerText = "Solo se necesita un número.";
-        } else {
-            dynamicInputs.innerHTML = `
-                <input type="number" id="input1" placeholder="Número 1">
-                <input type="number" id="input2" placeholder="Número 2">
-            `;
-            inputHelp.innerText = "Esta operación necesita dos números.";
-        }
-    }
-
-    function mostrarInputsSucesiones() {
-        const tipo = document.getElementById('sequences').value;
-        const dynamicInputs = document.getElementById('dynamicInputs');
-
-        switch (tipo) {
-            case "0":
-                dynamicInputs.innerHTML = `<input type="number" id="input1" placeholder="Cantidad de términos">`;
-                inputHelp.innerText = "Introduce la cantidad de términos de Fibonacci.";
-                break;
-            case "3":
-                dynamicInputs.innerHTML = `
-                    <input type="number" id="input1" placeholder="Primer término">
-                    <input type="number" id="input2" placeholder="Posición del segundo término">
-                    <input type="number" id="input3" placeholder="Segundo término">
-                `;
-                inputHelp.innerText = "A = primer término, posición del segundo término, y su valor.";
-                break;
-            default:
-                dynamicInputs.innerHTML = `
-                    <input type="number" id="input1" placeholder="Valor A / Base">
-                    <input type="number" id="input2" placeholder="Valor B / Exponente">
-                    <input type="number" id="input3" placeholder="Módulo N / Posición">
-                `;
-                inputHelp.innerText = "Se necesitan tres valores para esta operación.";
-                break;
-        }
-    }
-function handleBasicOperations() {
-        const op = document.getElementById('basicOperations').value;
-        const n1 = parseInt(document.getElementById('input1').value);
-        const n2 = document.getElementById('input2') ? parseInt(document.getElementById('input2').value) : null;
-        let resultadoTexto = "";
-        let explicacion = "";
-
-        if (isNaN(n1) || (op <= 2 && isNaN(n2))) {
-            result.innerText = "Por favor ingrese los valores necesarios.";
-            result.style.display = "block";
-            return;
-        }
-
-        switch (op) {
-            case "0":
-                explicacion = `PASO A PASO:\n1. Tomamos el dividendo (${n1}) y el divisor (${n2})\n`;
-                explicacion += `2. Realizamos la división: ${n1} ÷ ${n2}\n`;
-                explicacion += `3. El resultado es ${(n1 / n2).toFixed(2)}`;
-                resultadoTexto = `División: ${n1} ÷ ${n2} = ${(n1 / n2).toFixed(2)}\n\n${explicacion}`;
-                break;
-                
-            case "1":
-                const m = mcm(n1, n2);
-                explicacion = `PASO A PASO (Método usando MCD):\n1. Calculamos el MCD de ${n1} y ${n2} = ${mcd(n1, n2)}\n`;
-                explicacion += `2. Aplicamos la fórmula: MCM(a,b) = (a × b) / MCD(a,b)\n`;
-                explicacion += `3. (${n1} × ${n2}) / ${mcd(n1, n2)} = ${n1*n2} / ${mcd(n1, n2)} = ${m}`;
-                resultadoTexto = `MCM: ${m}\n\n${explicacion}`;
-                break;
-                
-            case "2":
-                const d = mcd(n1, n2);
-                explicacion = `PASO A PASO (Algoritmo de Euclides):\n`;
-                let a = n1, b = n2;
-                while(b !== 0) {
-                    explicacion += `- MCD(${a}, ${b}) = MCD(${b}, ${a % b})\n`;
-                    const temp = b;
-                    b = a % b;
-                    a = temp;
-                }
-                explicacion += `El último residuo no cero es ${a}, que es el MCD`;
-                resultadoTexto = `MCD: ${d}\n\n${explicacion}`;
-                break;
-                
-            case "3":
-                const esPrimo = isPrime(n1);
-                explicacion = `PASO A PASO:\n1. Un número primo solo es divisible por 1 y sí mismo\n`;
-                explicacion += `2. Verificamos divisores hasta √${n1} (${Math.floor(Math.sqrt(n1))})\n`;
-                
-                if(!esPrimo) {
-                    let divisores = [];
-                    for(let i = 2; i < n1; i++) {
-                        if(n1 % i === 0) divisores.push(i);
-                    }
-                    explicacion += `3. Encontramos divisores: ${divisores.length > 0 ? divisores.join(', ') : 'ninguno'}\n`;
-                    explicacion += `4. Por lo tanto, NO es primo`;
-                } else {
-                    explicacion += `3. No encontramos divisores aparte de 1 y ${n1}\n`;
-                    explicacion += `4. Por lo tanto, ES primo`;
-                }
-                resultadoTexto = `${n1} ${esPrimo ? "es primo" : "no es primo"}.\n\n${explicacion}`;
-                break;
-        }
-
-        result.innerText = resultadoTexto;
-        result.style.display = "block";
-    }
-    function handleSequences() {
-    const tipo = document.getElementById('sequences').value;
-    const n1 = parseInt(document.getElementById('input1').value);
-    const n2 = document.getElementById('input2') ? parseInt(document.getElementById('input2').value) : null;
-    const n3 = document.getElementById('input3') ? parseInt(document.getElementById('input3').value) : null;
-    
-    if (isNaN(n1) || (tipo !== "0" && isNaN(n2)) || (tipo !== "0" && tipo !== "1" && isNaN(n3))) {
-        result.innerText = "Por favor ingrese los valores necesarios.";
-        result.style.display = "block";
-        return;
-    }
-
-    let resultadoTexto = "";
-    let explicacion = "";
-
-    switch(tipo) {
-        case "0": // Fibonacci
-            let fib = [0, 1];
-            explicacion = "PASO A PASO (Fibonacci):\n1. Inicia con 0 y 1\n2. Cada término siguiente es la suma de los dos anteriores\n";
-            for(let i = 2; i < n1; i++) {
-                fib.push(fib[i-1] + fib[i-2]);
-                explicacion += `- Término ${i+1}: ${fib[i-1]} + ${fib[i-2]} = ${fib[i]}\n`;
-            }
-            resultadoTexto = `Secuencia Fibonacci (${n1} términos):\n${fib.slice(0, n1).join(", ")}\n\n${explicacion}`;
-            break;
-        case "1": // Congruencia
-            explicacion = `PASO A PASO (Congruencia):\n1. Fórmula: A ≡ B mod N\n2. ${n1} ≡ ${n2} mod ${n3}\n`;
-            const congruente = (n1 % n3) === (n2 % n3);
-            explicacion += `3. ${n1 % n3} ${congruente ? "=" : "≠"} ${n2 % n3}\n`;
-            resultadoTexto = `${n1} ${congruente ? "SÍ" : "NO"} es congruente con ${n2} módulo ${n3}\n\n${explicacion}`;
-            break;
-        case "2": // Teorema de Euler
-            if (mcd(n1, n3) !== 1) {
-                resultadoTexto = `El teorema de Euler requiere que ${n1} y ${n3} sean coprimos (MCD = 1).`;
-            } else {
-                const phi = eulerPhi(n3);
-                explicacion = `PASO A PASO (Teorema de Euler):\n1. Calcular φ(${n3}) = ${phi}\n`;
-                explicacion += `2. Según el teorema: ${n1}^${phi} ≡ 1 mod ${n3}\n`;
-                const eulerResult = modExp(n1, phi, n3);
-                explicacion += `3. Resultado: ${eulerResult} (siempre 1 si son coprimos)`;
-                resultadoTexto = `Teorema de Euler: ${n1}^${phi} ≡ 1 mod ${n3}\n\n${explicacion}`;
-            }
-            break;
-        case "3": // Sucesión aritmética
-            const diferencia = (n3 - n1) / (n2 - 1);
-            explicacion = `PASO A PASO (Sucesión aritmética):\n1. Diferencia común = (${n3} - ${n1}) / (${n2} - 1) = ${diferencia}\n`;
-            let arithSeq = [];
-            for (let i = 0; i < n2; i++) {
-            let termino = n1 + i * diferencia;
-            arithSeq.push(termino);
-                explicacion += `- Término ${i+1}: ${n1} + ${i}*${diferencia} = ${arithSeq[i]}\n`;
-            }
-            resultadoTexto = `Sucesión aritmética:\n${arithSeq.join(", ")}\n\n${explicacion}`;
-            break;
-        case "4": // Sucesión geométrica
-            const razon = Math.pow(n3 / n1, 1 / (n2 - 1));
-            explicacion = `PASO A PASO (Sucesión geométrica):\n1. Razón común = (${n3}/${n1})^(1/(${n2}-1)) ≈ ${razon.toFixed(2)}\n`;
-            let geoSeq = [n1];
-            for (let i = 1; i < 5; i++) {
-                geoSeq.push(n1 * Math.pow(razon, i));
-                explicacion += `- Término ${i+1}: ${n1} * ${razon.toFixed(2)}^${i} ≈ ${geoSeq[i].toFixed(2)}\n`;
-            }
-            resultadoTexto = `Sucesión geométrica:\n${geoSeq.map(x => x.toFixed(2)).join(", ")}\n\n${explicacion}`;
-            break;
-    }
-
-    result.innerText = resultadoTexto;
-    result.style.display = "block";
-}
-
-// Función auxiliar para el teorema de Euler
-function eulerPhi(n) {
-    let result = n;
-    for (let p = 2; p * p <= n; p++) {
-        if (n % p === 0) {
-            while (n % p === 0) n /= p;
-            result -= result / p;
-        }
-    }
-    if (n > 1) result -= result / n;
-    return result;
-}
-    function handleOrder() {
-        const n = parseInt(document.getElementById('input1').value);
-        const op = document.getElementById('order').value;
-
-        if (isNaN(n)) return mostrarError();
-
-        let nums = Array.from({ length: n }, (_, i) => i + 1);
-        result.innerText = (op === "0" ? nums : nums.reverse()).join(", ");
-        result.style.display = "block";
-    }
-
-function handleProbability() {
-        const n = parseInt(document.getElementById('input1').value);
-        const r = parseInt(document.getElementById('input2').value);
-        const op = document.getElementById('probability').value;
-
-        if (isNaN(n) || isNaN(r)) return mostrarError();
-        if (n < r) {
-            result.innerText = "n debe ser mayor o igual a r.";
-        } else {
-            const factorial = x => x <= 1 ? 1 : x * factorial(x - 1);
-            if (op === "0") {
-                result.innerText = `Permutación: P(${n},${r}) = ${factorial(n) / factorial(n - r)}`;
-            } else {
-                result.innerText = `Combinación: C(${n},${r}) = ${factorial(n) / (factorial(r) * factorial(n - r))}`;
-            }
-        }
-
-        result.style.display = "block";
-    }
-
-
-    const mcd = (a, b) => b === 0 ? a : mcd(b, a % b);
-    const mcm = (a, b) => (a * b) / mcd(a, b);
-    const isPrime = n => n > 1 && Array.from({ length: Math.floor(Math.sqrt(n)) }, (_, i) => i + 2).every(i => n % i !== 0);
-    const modExp = (a, b, n) => {
-        let res = 1;
-        a = a % n;
-        while (b > 0) {
-            if (b % 2 === 1) res = (res * a) % n;
-            a = (a * a) % n;
-            b = Math.floor(b / 2);
-        }
-        return res;
-    };
-
-    actualizarInterfaz();
-</script>
+    <button type="submit">Calcular</button>
+  </form>
 </body>
 </html>
